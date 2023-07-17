@@ -1,0 +1,67 @@
+USE acervobiblioteca;
+
+/* Criando a tabela de leitores: */
+CREATE TABLE `acervobiblioteca`.`leitores` (
+  `idLeitores` INT NOT NULL AUTO_INCREMENT,
+  `Nm_Leitores` VARCHAR(80) NOT NULL,
+  `Cpf_Leitores` VARCHAR(14) NOT NULL,
+  `Email_Leitores` VARCHAR(50) NOT NULL,
+  `Tel_Leitores` VARCHAR(20) NOT NULL,
+  `End_Leitores` VARCHAR(60) NOT NULL,
+  PRIMARY KEY (`idLeitores`),
+  UNIQUE INDEX `Cpf_Leitores_UNIQUE` (`Cpf_Leitores` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+/* Criando a tabela de empréstimos: */
+CREATE TABLE `acervobiblioteca`.`emprestimos` (
+  `idEmprestimos` INT NOT NULL AUTO_INCREMENT,
+  `idObra` INT NOT NULL,
+  `idLeitor` INT NOT NULL,
+  `Emprestimo` DATE NOT NULL,
+  `Devolucao` DATE NOT NULL,
+  PRIMARY KEY (`idEmprestimos`),
+  INDEX `idObra_idx` (`idObra` ASC) VISIBLE,
+  INDEX `idLeitor_idx` (`idLeitor` ASC) VISIBLE,
+  CONSTRAINT `idObra`
+    FOREIGN KEY (`idObra`)
+    REFERENCES `acervobiblioteca`.`obras` (`idObras`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `idLeitor`
+    FOREIGN KEY (`idLeitor`)
+    REFERENCES `acervobiblioteca`.`leitores` (`idLeitores`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+/* Criando a tabela de tipos de periódicos: */
+CREATE TABLE `acervobiblioteca`.`tipo_periodico` (
+  `idTipo_Periodico` INT NOT NULL AUTO_INCREMENT,
+  `Nm_Tipo_Periodico` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idTipo_Periodico`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+/* Criando a tabela de obras: */
+CREATE TABLE `acervobiblioteca`.`obras` (
+  `idObras` INT NOT NULL AUTO_INCREMENT,
+  `idTipo_Periodicos` INT NOT NULL,
+  `Nm_Obra` VARCHAR(50) NOT NULL,
+  `Nm_Autor` VARCHAR(80) NOT NULL,
+  `Edicao` INT NULL,
+  `Cidade` VARCHAR(30) NULL,
+  `Editora` VARCHAR(40) NULL,
+  `Paginas` INT NULL,
+  `Cm` DECIMAL NULL,
+  `Isbn` VARCHAR(15) NULL,
+  `Cdu` VARCHAR(15) NULL,
+  `Exemplares` INT NULL,
+  `Palavras_Chave` VARCHAR(60) NULL,
+  `Disponivel` TINYINT NOT NULL,
+  PRIMARY KEY (`idObras`),
+  INDEX `idTipo_Periodico_idx` (`idTipo_Periodicos` ASC) VISIBLE,
+  CONSTRAINT `idTipo_Periodico`
+    FOREIGN KEY (`idTipo_Periodicos`)
+    REFERENCES `acervobiblioteca`.`tipo_periodico` (`idTipo_Periodico`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
